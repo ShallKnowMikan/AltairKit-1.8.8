@@ -4,15 +4,27 @@ plugins {
 }
 
 group = "dev.mikan"
-version = "1.0"
+version = "1.8.8"
 
-val outputDir = file("/home/mikan/Desktop/builds")
+val outputDir = file("/home/mikan/Desktop/localhosts/1_8/plugins")
 
 tasks.register<Copy>("copy"){
     dependsOn(tasks.named("jar"))
     from(tasks.named("jar").get().outputs.files)
     into(outputDir)
 }
+
+tasks.register<Exec>("updateRepo"){
+    workingDir = file("/home/mikan/IdeaProjects/AltairKit-1.8.8/build/libs/")
+    commandLine(
+        "mvn",
+        "install:install-file",
+        "-Dfile=Altair-1.8.8.jar",
+        "-DgroupId=dev.mikan",
+        "-DartifactId=AltairKit",
+        "-Dversion=1.8.8",
+        "-Dpackaging=jar"
+    )}
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>(){
     archiveClassifier.set("")
@@ -28,12 +40,8 @@ java {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
-    flatDir {
-        dirs ("/home/mikan/.m2/repository/dev/mikan/AltairKit/1.8.8")
-    }
-
+    mavenLocal()
     maven { url = uri("https://repo.codemc.io/repository/maven-releases/") }
 
     maven { url = uri("https://repo.codemc.io/repository/maven-snapshots/") }
@@ -48,13 +56,13 @@ dependencies {
     compileOnly ("org.projectlombok:lombok:1.18.36")
     annotationProcessor ("org.projectlombok:lombok:1.18.36")
 
-    // Packet events
-    compileOnly("com.github.retrooper:packetevents-spigot:2.7.0")
-    implementation("dev.mikan:AltairKit:1.8.8")
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    implementation("org.slf4j:slf4j-simple:2.0.13")
 }
 
 tasks.named("build"){
-    dependsOn(tasks.named("shadowJar"))
-//    finalizedBy("copy")
+//    dependsOn(tasks.named("shadowJar"))
+    finalizedBy("copy")
+    finalizedBy("updateRepo")
 
 }
