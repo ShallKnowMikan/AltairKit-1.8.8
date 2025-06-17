@@ -6,7 +6,9 @@ plugins {
 group = "dev.mikan"
 version = "1.8.8"
 
-val outputDir = file("/home/mikan/Desktop/localhosts/1_8/plugins")
+val outputDir = file(project.extra["outputDir"] as String)
+val copyBoolean = project.extra["copy"] as Boolean
+val updateBoolean = project.extra["updateRepo"] as Boolean
 
 tasks.register<Copy>("copy"){
     dependsOn(tasks.named("jar"))
@@ -62,7 +64,10 @@ dependencies {
 
 tasks.named("build"){
 //    dependsOn(tasks.named("shadowJar"))
-    finalizedBy("copy")
-    finalizedBy("updateRepo")
 
+    if (copyBoolean)
+        finalizedBy("copy")
+
+    if (updateBoolean)
+        finalizedBy("updateRepo")
 }
