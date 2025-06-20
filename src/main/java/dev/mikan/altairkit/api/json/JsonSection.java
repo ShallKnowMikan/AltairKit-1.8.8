@@ -4,6 +4,7 @@ package dev.mikan.altairkit.api.json;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import dev.mikan.altairkit.utils.Singleton;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public abstract class JsonSection {
+public abstract class JsonSection implements Singleton {
 
     protected final File file;
     protected final Gson gson;

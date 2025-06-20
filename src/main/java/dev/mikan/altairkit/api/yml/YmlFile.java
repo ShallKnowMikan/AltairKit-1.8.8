@@ -1,5 +1,6 @@
 package dev.mikan.altairkit.api.yml;
 
+import dev.mikan.altairkit.utils.Singleton;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -11,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.logging.Level;
 
-public class YmlFile {
+public class YmlFile implements Singleton {
 
     private FileConfiguration file;
 

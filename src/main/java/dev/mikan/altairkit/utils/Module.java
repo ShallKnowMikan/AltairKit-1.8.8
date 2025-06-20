@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class Module {
+public abstract class Module implements Singleton {
 
     protected Set<Listener> listeners;
 
@@ -50,6 +50,7 @@ public abstract class Module {
 
     public abstract void onEnable();
 
+    public abstract void onReload();
     public abstract void onDisable();
 
     public abstract void loadConfig();
@@ -63,17 +64,17 @@ public abstract class Module {
     }
 
     public void info(String message,Object...params){
-        String msg = "["+name+"] "+message;
+        String msg = "["+plugin.getName()+" -> "+name+"] "+message;
         logger.info(msg,params);
     }
 
     public void error(String message,Object...params){
-        String msg = "["+name+"] "+message;
+        String msg = "["+plugin.getName()+" -> "+name+"] "+message;
         logger.error(msg,params);
     }
 
     public void warning(String message,Object...params){
-        String msg = "["+name+"] "+message;
+        String msg = "["+plugin.getName()+" -> "+name+"] "+message;
         logger.warn(msg,params);
     }
 

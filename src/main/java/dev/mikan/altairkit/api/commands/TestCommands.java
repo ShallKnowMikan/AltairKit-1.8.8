@@ -15,8 +15,8 @@ public class TestCommands {
     @Description("testing my stuff")
     @Permission(value = "dev.mikan.test",blocking = false)
     @Sender(SenderType.PLAYER)
-    public void hello(AltairCMD cmd, CMDActor actor, String message, int integer, @Default Player target, double doubleValue){
-        target.sendMessage("Altair: " + ChatColor.BLUE + message + " " + integer+ " " + doubleValue);
+    public void hello(AltairCMD cmd, CMDActor actor,@Default Player target, String message){
+        target.sendMessage("Altair: " + ChatColor.BLUE + message);
     }
 
 

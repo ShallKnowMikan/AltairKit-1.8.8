@@ -1,5 +1,6 @@
 package dev.mikan.altairkit.api.yml;
 
+import dev.mikan.altairkit.utils.Singleton;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-public class ConfigManager {
+public class ConfigManager implements Singleton {
 
     private final File dataFolder;
 

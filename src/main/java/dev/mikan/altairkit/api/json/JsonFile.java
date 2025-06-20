@@ -2,6 +2,7 @@ package dev.mikan.altairkit.api.json;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import dev.mikan.altairkit.utils.Singleton;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,7 +11,7 @@ import java.io.*;
 import java.lang.reflect.Type;
 import java.util.*;
 
-public class JsonFile extends JsonSection {
+public class JsonFile extends JsonSection implements Singleton {
 
 
     public JsonFile(File dataFolder, String name) {

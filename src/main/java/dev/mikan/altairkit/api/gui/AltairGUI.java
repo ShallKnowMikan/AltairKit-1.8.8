@@ -1,48 +1,29 @@
 package dev.mikan.altairkit.api.gui;
 
 import dev.mikan.altairkit.AltairKit;
+import dev.mikan.altairkit.utils.Singleton;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 
-public abstract class AltairGUI {
+public abstract class AltairGUI implements Singleton {
 
     protected ItemStack fillerItem;
     protected String title;
     protected int slots;
     protected Inventory gui;
 
-    public AltairGUI(ItemStack fillerItem, String title, int slots,boolean fill) {
-
-        this.fillerItem = fillerItem;
-        this.title = AltairKit.colorize(title);
-        this.slots = slots;
-
-        if (fill) createSurroundedPage();
-        else createGUI();
-    }
-
-
-
-    public AltairGUI(ItemStack fillerItem, String title, int slots) {
-        this.fillerItem = fillerItem;
-        this.title = AltairKit.colorize(title);
-        this.slots = slots;
-
-        createSurroundedPage();
-    }
-
-
 
 
     public AltairGUI(String title, int slots) {
+
         this.title = AltairKit.colorize(title);
         this.slots = slots;
 
-        createGUI();
     }
+
 
 
 
@@ -52,13 +33,25 @@ public abstract class AltairGUI {
 
     }
 
+    public void build(ItemStack fillerItem,boolean fill){
+        if (fillerItem != null && !fill) {
+            createSurroundedPage();
+            return;
+        }
+        createGUI();
+        if (fill){
+            for (int i = 0; i < slots; i++) {
+                if (this.gui.getItem(i) == null) this.gui.setItem(i,fillerItem);
+            }
+        }
+    }
 
     /*
     * reset title without resetting the items inside
     * */
-    protected void rebuild(String title,boolean fill){
+    protected void changeTitle(String title){
         this.title = AltairKit.colorize(title);
-        if (fill) createSurroundedPage();
+        if (fillerItem != null) createSurroundedPage();
         else createGUI();
     }
 

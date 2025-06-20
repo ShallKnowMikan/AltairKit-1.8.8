@@ -1,5 +1,6 @@
 package dev.mikan.altairkit.api.commands;
 
+import dev.mikan.altairkit.utils.Singleton;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.defaults.BukkitCommand;
@@ -10,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class AltairCommand extends BukkitCommand {
+public abstract class AltairCommand extends BukkitCommand implements Singleton  {
 
     public static final Set<AltairCommand> commands = new HashSet<>();
 
