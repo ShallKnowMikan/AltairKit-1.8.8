@@ -14,7 +14,7 @@ public abstract class Module implements Singleton {
 
     protected Set<Listener> listeners;
 
-    protected final Plugin plugin;
+    protected final Plugin pluginInstance;
 
     private final String name;
     private final Logger logger;
@@ -23,7 +23,7 @@ public abstract class Module implements Singleton {
 
 
     public Module(Plugin plugin, String name, Logger logger) {
-        this.plugin = plugin;
+        this.pluginInstance = plugin;
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Module name cannot be blank");
         }
@@ -37,14 +37,14 @@ public abstract class Module implements Singleton {
     protected void listen(Listener... listeners){
         this.listeners = new HashSet<> (Arrays.asList(listeners));
         for (Listener listener : listeners) {
-            plugin.getServer().getPluginManager().registerEvents(listener,plugin);
+            pluginInstance.getServer().getPluginManager().registerEvents(listener, pluginInstance);
         }
     }
 
     protected void listen(Set<Listener>  listeners){
         this.listeners = listeners;
         for (Listener listener : listeners) {
-            plugin.getServer().getPluginManager().registerEvents(listener,plugin);
+            pluginInstance.getServer().getPluginManager().registerEvents(listener, pluginInstance);
         }
     }
 
@@ -60,21 +60,21 @@ public abstract class Module implements Singleton {
     public abstract void registerListeners(Plugin plugin);
 
     public FileConfiguration getConfig() {
-        return plugin.getConfig();
+        return pluginInstance.getConfig();
     }
 
     public void info(String message,Object...params){
-        String msg = "["+plugin.getName()+" -> "+name+"] "+message;
+        String msg = "["+ pluginInstance.getName()+" -> "+name+"] "+message;
         logger.info(msg,params);
     }
 
     public void error(String message,Object...params){
-        String msg = "["+plugin.getName()+" -> "+name+"] "+message;
+        String msg = "["+ pluginInstance.getName()+" -> "+name+"] "+message;
         logger.error(msg,params);
     }
 
     public void warning(String message,Object...params){
-        String msg = "["+plugin.getName()+" -> "+name+"] "+message;
+        String msg = "["+ pluginInstance.getName()+" -> "+name+"] "+message;
         logger.warn(msg,params);
     }
 
@@ -82,8 +82,8 @@ public abstract class Module implements Singleton {
         return listeners;
     }
 
-    public Plugin getPlugin() {
-        return plugin;
+    public Plugin getPluginInstance() {
+        return pluginInstance;
     }
 
     public String getName() {

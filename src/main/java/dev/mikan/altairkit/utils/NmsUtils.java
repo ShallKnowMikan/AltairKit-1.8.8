@@ -1,5 +1,6 @@
 package dev.mikan.altairkit.utils;
 
+import lombok.experimental.UtilityClass;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -11,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import java.util.Set;
 
+@UtilityClass
 public class NmsUtils {
 
     /**
@@ -24,6 +26,37 @@ public class NmsUtils {
         IChatBaseComponent chatComponent = new ChatComponentText(message);
         PacketPlayOutChat packet = new PacketPlayOutChat(chatComponent, (byte) 2);
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+    }
+
+    /*
+     * PacketPlayOutTitle params:
+     * first -> fade in ticks
+     *
+     * middle -> time on screen (expressed in ticks)
+     *
+     * last -> fade out ticks
+     * */
+
+    public void sendTitle(Player player,String message){
+        IChatBaseComponent chatTitle = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
+
+        PacketPlayOutTitle title = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, chatTitle);
+        PacketPlayOutTitle length = new PacketPlayOutTitle(5, 20, 5);
+
+
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(title);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);
+    }
+
+    public void sendSubtitle(Player player,String message){
+        IChatBaseComponent chatTitle = IChatBaseComponent.ChatSerializer.a("{\"text\": \"" + message + "\"}");
+
+        PacketPlayOutTitle title = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, chatTitle);
+        PacketPlayOutTitle length = new PacketPlayOutTitle(5, 20, 5);
+
+
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(title);
+        ((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);
     }
 
     /**
