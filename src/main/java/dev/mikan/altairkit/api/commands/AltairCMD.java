@@ -4,6 +4,7 @@ import dev.mikan.altairkit.api.commands.actors.CMDActor;
 import dev.mikan.altairkit.api.commands.actors.ConsoleActor;
 import dev.mikan.altairkit.api.commands.actors.DefaultActor;
 import dev.mikan.altairkit.api.commands.actors.PlayerActor;
+import dev.mikan.altairkit.api.commands.annotations.Complete;
 import dev.mikan.altairkit.api.commands.annotations.Description;
 import dev.mikan.altairkit.api.commands.annotations.Permission;
 import dev.mikan.altairkit.api.commands.annotations.Sender;
@@ -36,7 +37,7 @@ public class AltairCMD extends BukkitCommand {
 
     private final Map<String,AltairCMD> subcommands = new HashMap<>();
 
-    public AltairCMD(String name, Object instance, Method onPerform, String[] params, Permission permission, Sender senderType, Description description) {
+    public AltairCMD(String name, Object instance, Method onPerform, String[] params, Complete complete, Permission permission, Sender senderType, Description description) {
         super(name);
         this.onPerform = onPerform;
         this.instance = instance;
@@ -44,6 +45,8 @@ public class AltairCMD extends BukkitCommand {
         this.isPermissionBlocking = permission != null && permission.blocking();
         this.senderType = senderType == null ? SenderType.ALL : senderType.value();
         this.description = description == null ? "" : description.value();
+        if (complete != null)
+            this.suggestions = List.of(complete.value().split(" ")).toArray(new String[0]);
         this.params = params;
     }
 

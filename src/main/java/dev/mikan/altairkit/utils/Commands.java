@@ -35,6 +35,7 @@ public final class Commands {
                 Description description = method.getDeclaredAnnotation(Description.class);
                 Sender sender = method.getDeclaredAnnotation(Sender.class);
                 Permission permission = method.getDeclaredAnnotation(Permission.class);
+                Complete complete = method.getDeclaredAnnotation(Complete.class);
 
                 // Saves just the root cmd
                 // split method always return at least one element
@@ -42,7 +43,7 @@ public final class Commands {
                 // if it has subcommands
                 if (cmdParts.length > 1) {
                     if (!rootCMDs.containsKey(cmdParts[0])){
-                        registerRoot(cmdParts[0],commandsObject,method,Arrays.copyOfRange(cmdParts,1,cmdParts.length),permission,sender,description);
+                        registerRoot(cmdParts[0],commandsObject,method,Arrays.copyOfRange(cmdParts,1,cmdParts.length),complete,permission,sender,description);
                     }
 
                     AltairCMD currentCMD = rootCMDs.get(cmdParts[0]);
@@ -60,7 +61,7 @@ public final class Commands {
 
                         if (!isLast && !currentCMD.getSubcommands().containsKey(cmdParts[i + 1])) {
                             String[] args = Arrays.copyOfRange(cmdParts,2,cmdParts.length);
-                            AltairCMD nextCMD = new AltairCMD(cmdParts[i + 1],null,null, args ,permission, sender ,description);
+                            AltairCMD nextCMD = new AltairCMD(cmdParts[i + 1],null,null, args, complete,permission, sender ,description);
                             currentCMD.addSubCMD(nextCMD);
                             currentCMD = nextCMD;
                         } else if (isLast) {
@@ -74,7 +75,7 @@ public final class Commands {
                     }
                     // If command has no subcommands
                 } else {
-                    registerRoot(cmdParts[0],commandsObject,method,Arrays.copyOfRange(cmdParts,1,cmdParts.length),permission,sender,description);
+                    registerRoot(cmdParts[0],commandsObject,method,Arrays.copyOfRange(cmdParts,1,cmdParts.length),complete,permission,sender,description);
                 }
 
             }
@@ -105,8 +106,8 @@ public final class Commands {
         current.setSuggestions(suggestions);
     }
 
-    private void registerRoot(String cmdName, Object instance, Method onPerform,String[] args, Permission permission, Sender sender, Description description){
-        AltairCMD rootCMD = new AltairCMD(cmdName,instance,onPerform,args,permission, sender, description);
+    private void registerRoot(String cmdName, Object instance, Method onPerform,String[] args,Complete complete, Permission permission, Sender sender, Description description){
+        AltairCMD rootCMD = new AltairCMD(cmdName,instance,onPerform,args,complete,permission, sender, description);
         CmdMap.getCommandMap().register(cmdName,rootCMD);
         rootCMDs.put(cmdName, rootCMD);
     }

@@ -76,7 +76,9 @@ public class NBTUtils {
     public boolean hasKey(org.bukkit.inventory.ItemStack item,String key) {
         ItemStack nmsItem = CraftItemStack.asNMSCopy(item);
 
-        return nmsItem.hasTag();
+        if (!nmsItem.hasTag()) return false;
+        NBTTagCompound tag = nmsItem.getTag();
+        return tag.hasKey(key);
     }
 }
 

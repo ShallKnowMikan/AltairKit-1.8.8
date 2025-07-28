@@ -7,6 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemBuilder {
 
@@ -34,12 +35,7 @@ public class ItemBuilder {
 
 
         ItemMeta meta = this.item.getItemMeta();
-        if (lore == null)
-            meta.setLore(new ArrayList<>());
-        else {
-            lore.forEach(AltairKit::colorize);
-            meta.setLore(lore);
-        }
+        meta.setLore(Objects.requireNonNullElseGet(lore, ArrayList::new));
         this.item.setItemMeta(meta);
         return this;
     }

@@ -81,7 +81,8 @@ public class ConfigManager implements Singleton {
      * If the file or the specified dirs don't exist
      * it will create it
      * */
-    public void load(String filePath, InputStream source) throws IOException {
+    public void load(String filePath, JavaPlugin plugin) throws IOException {
+        InputStream source = plugin.getResource(filePath);
         if (!filePath.endsWith(".yml"))
             filePath += ".yml";
 

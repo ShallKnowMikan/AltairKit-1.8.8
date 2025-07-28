@@ -17,11 +17,15 @@ import dev.mikan.altairkit.utils.SkinFetcher;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -62,6 +66,26 @@ public final class AltairKit extends JavaPlugin {
 
     public static void registerCommand(AltairCommand command){
         CmdMap.getCommandMap().register("", command);
+    }
+
+
+
+    public static ItemStack head(Player player) {
+        ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
+        SkullMeta meta = (SkullMeta) skull.getItemMeta();
+
+        GameProfile profile = ((CraftPlayer)player).getProfile();
+
+        try {
+            Field profileField = meta.getClass().getDeclaredField("profile");
+            profileField.setAccessible(true);
+            profileField.set(meta, profile);
+            meta.setOwner(player.getName());
+            skull.setItemMeta(meta);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return skull;
     }
 
     public static ItemStack head(String name){
@@ -109,6 +133,12 @@ public final class AltairKit extends JavaPlugin {
 
     public static String colorize(String s){
         return ChatColor.translateAlternateColorCodes('&',s);
+    }
+
+    public static List<String> colorize(List<String> lines){
+        List<String> colorizedList = new ArrayList<>();
+        lines.forEach(line -> colorizedList.add(ChatColor.translateAlternateColorCodes('&',line)));
+        return colorizedList;
     }
 
 }

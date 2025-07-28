@@ -1,28 +1,38 @@
 package dev.mikan.altairkit.utils;
 
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.slf4j.Logger;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+@Slf4j
 public abstract class Module implements Singleton {
 
+    @Getter
     protected Set<Listener> listeners;
 
+    @Getter
     protected final Plugin pluginInstance;
 
+    @Getter
     private final String name;
-    private final Logger logger;
+    @Getter
+    private final java.util.logging.Logger logger;
+    @Getter
     protected boolean loaded = false;
+    protected final Map<Class<? extends Module>,Module> submodules = new ConcurrentHashMap<>();
 
 
 
-    public Module(Plugin plugin, String name, Logger logger) {
+    public Module(Plugin plugin, String name, java.util.logging.Logger logger) {
         this.pluginInstance = plugin;
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Module name cannot be blank");
@@ -64,38 +74,23 @@ public abstract class Module implements Singleton {
     }
 
     public void info(String message,Object...params){
-        String msg = "["+ pluginInstance.getName()+" -> "+name+"] "+message;
-        logger.info(msg,params);
+        logger.info(processMessage(message,params));
     }
 
     public void error(String message,Object...params){
-        String msg = "["+ pluginInstance.getName()+" -> "+name+"] "+message;
-        logger.error(msg,params);
+        logger.warning(processMessage(message,params));
     }
 
     public void warning(String message,Object...params){
-        String msg = "["+ pluginInstance.getName()+" -> "+name+"] "+message;
-        logger.warn(msg,params);
+        logger.severe(processMessage(message,params));
     }
 
-    public Set<Listener> getListeners() {
-        return listeners;
-    }
 
-    public Plugin getPluginInstance() {
-        return pluginInstance;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Logger getLogger() {
-        return logger;
-    }
-
-    public boolean isLoaded() {
-        return loaded;
+    private String processMessage(String msg, Object... params) {
+        for (Object param : params) {
+            msg = msg.replaceFirst("\\{}",param.toString());
+        }
+        return  "["+ pluginInstance.getName()+" -> "+name+"] "+msg;
     }
 }
 

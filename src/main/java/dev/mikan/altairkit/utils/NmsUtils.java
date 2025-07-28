@@ -93,84 +93,28 @@ public class NmsUtils {
         }
     }
 
-    public static void sendParticles(float x , float y , float z, EnumParticle particle, float speed, int count) {
+    public static void sendParticles(Location location, EnumParticle particle, float speed, int count,int radius) {
 
         try {
 
-            float offsetX = 0;
-            float offsetY = 0;
-            float offsetZ = 0;
+            float x = (float) location.getX();
+            float y = (float) location.getY();
+            float z = (float) location.getZ();
 
 
             PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
                     particle,
                     true,
                     x, y, z,
-                    offsetX, offsetY, offsetZ,
+                    0, 0, 0,
                     speed,
                     count
             );
 
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-            }
-        } catch (Exception ignored) {
-
-        }
-    }
-
-    public static void sendParticles(Chunk[] chunks,float x , float y , float z, EnumParticle particle, float speed, int count) {
-
-        try {
-
-            float offsetX = 0;
-            float offsetY = 0;
-            float offsetZ = 0;
-
-
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
-                    particle,
-                    true,
-                    x, y, z,
-                    offsetX, offsetY, offsetZ,
-                    speed,
-                    count
-            );
-
-            for (Chunk chunk : chunks) {
-                for (Entity entity : chunk.getEntities()) {
-                    if (!(entity instanceof Player)) continue;
-
-                    Player player = (Player) entity;
+            for (Entity entity : location.getWorld().getNearbyEntities(location,radius,radius,radius)) {
+                if (entity instanceof Player player)
                     ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
-                }
             }
-
-        } catch (Exception ignored) {
-
-        }
-    }
-
-    public static void sendParticles(float x , float y , float z, EnumParticle particle, float speed, int count,Set<Player> players) {
-
-        try {
-
-            float offsetX = 0;
-            float offsetY = 0;
-            float offsetZ = 0;
-
-
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(
-                    particle,
-                    true,
-                    x, y, z,
-                    offsetX, offsetY, offsetZ,
-                    speed,
-                    count
-            );
-
-            players.forEach(player -> ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet));
-
         } catch (Exception ignored) {
 
         }

@@ -5,10 +5,11 @@ import dev.mikan.altairkit.utils.Singleton;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 
-public abstract class AltairGUI implements Singleton {
+public abstract class AltairGUI implements Singleton,InventoryHolder {
 
     protected ItemStack fillerItem;
     protected String title;
@@ -33,12 +34,12 @@ public abstract class AltairGUI implements Singleton {
 
     }
 
-    public void build(ItemStack fillerItem,boolean fill){
+    public void build(ItemStack fillerItem, InventoryHolder holder, boolean fill){
         if (fillerItem != null && !fill) {
-            createSurroundedPage();
+            createSurroundedPage(holder);
             return;
         }
-        createGUI();
+        createGUI(holder);
         if (fill){
             for (int i = 0; i < slots; i++) {
                 if (this.gui.getItem(i) == null) this.gui.setItem(i,fillerItem);
@@ -51,19 +52,19 @@ public abstract class AltairGUI implements Singleton {
     * */
     protected void changeTitle(String title){
         this.title = AltairKit.colorize(title);
-        if (fillerItem != null) createSurroundedPage();
-        else createGUI();
+        if (fillerItem != null) createSurroundedPage(this.gui.getHolder());
+        else createGUI(this.gui.getHolder());
     }
 
-    private void createGUI(){
-        this.gui = Bukkit.createInventory(null, slots, title);
+    private void createGUI(InventoryHolder holder){
+        this.gui = Bukkit.createInventory(holder, slots, title);
     }
 
 
 
-    protected void createSurroundedPage() {
+    protected void createSurroundedPage(InventoryHolder holder) {
 
-        this.gui = Bukkit.createInventory(null, slots, title);
+        this.gui = Bukkit.createInventory(holder, slots, title);
 
         if (this.fillerItem == null) return;
 
