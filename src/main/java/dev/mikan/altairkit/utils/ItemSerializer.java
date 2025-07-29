@@ -38,6 +38,7 @@ public class ItemSerializer {
      * Item from Base64
      */
     public ItemStack fromBase64(String data) throws IOException {
+        if (data == null || data.isEmpty()) return null;
         ByteArrayInputStream inputStream = new ByteArrayInputStream(new BigInteger(data, 32).toByteArray());
 
         NBTTagCompound nbtTagCompoundRoot = NBTCompressedStreamTools.a(new DataInputStream(inputStream));

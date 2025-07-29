@@ -84,7 +84,7 @@ public abstract class Module implements Singleton {
 
     private String processMessage(String msg, Object... params) {
         for (Object param : params) {
-            msg = msg.replaceFirst("\\{}",param.toString());
+            msg = msg.replaceFirst("\\{}",param == null ? "null" : param.toString());
         }
         return  "["+ plugin.getName()+" -> "+name+"] "+msg;
     }

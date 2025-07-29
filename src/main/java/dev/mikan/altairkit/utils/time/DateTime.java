@@ -45,7 +45,7 @@ public final class DateTime {
     @Override
     public String toString() {
         return valid ?
-                String.format("%s/%s/%s %s:%s:%s", day, month, year, this.time.getHours(), this.time.getMinutes(), this.time.getSeconds())
+                String.format("%02d/%02d/%04d %02d:%02d:%02d", day, month, year, this.time.getHours(), this.time.getMinutes(), this.time.getSeconds())
                 : "" ;
     }
 
